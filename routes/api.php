@@ -18,10 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('country/{id}','CountryController@countryByID');
-Route::get('country','CountryController@country');
-Route::post('country','CountryController@countrysave');
-Route::put('country/{country}','CountryController@countryUpdate');
-Route::delete('country/{country}','CountryController@countryDelete');
+
 //maxmind routes
 Route::post('maxmind','MaxmindController@MaxmindRequestSave');

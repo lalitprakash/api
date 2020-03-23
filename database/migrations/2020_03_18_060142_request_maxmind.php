@@ -84,7 +84,7 @@ class RequestMaxmind extends Migration
             $table->string('previous_purchases',255)->nullable();
             $table->boolean('record_deleted')->default(0);
             $table->timestamps();
-            $table->engine = 'InnoDB';
+            $table->engine = 'MyISAM';
         });
 
         //create response table.
@@ -115,7 +115,7 @@ class RequestMaxmind extends Migration
             $table->string('ship_Country',255);
             $table->boolean('record_deleted')->default(0);
             $table->timestamps();
-            $table->engine = 'InnoDB';
+            $table->engine = 'MyISAM';
         });
 
         Schema::connection('mysql')->table('maxmind_response', function (Blueprint $table) {

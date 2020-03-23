@@ -12,8 +12,5 @@ class MaxmindRequestModel extends Model
 
     //use gard as blank which make all field as fillable.
 
-    public function test(){
-    	$test ="test";
-    	return  $test;
-    }
+  
 }

@@ -94,7 +94,8 @@ class MaxmindController extends Controller
     
 	
     //testing the data in to database..
-    $maxmind = new MinFraud(231747,'X3MRhIz988pVLyHo');
+
+    $maxmind = new MinFraud(14675, 'ABCD5690809907890');
     
 
     $mxrequest = $maxmind->withDevice([
@@ -172,7 +173,7 @@ class MaxmindController extends Controller
             'previous_user'      => $previous_user,
         ]);
 
-		$insightsResponse    = $mxrequest->insights();
+		$insightsResponse    			= $mxrequest->insights();
 		$score               			= $insightsResponse->riskScore;
         $maxmind_id          			= $insightsResponse->id;
         $address_latitude    			= $insightsResponse->billingAddress->latitude;
