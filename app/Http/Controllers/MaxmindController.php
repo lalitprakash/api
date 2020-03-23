@@ -85,9 +85,13 @@ class MaxmindController extends Controller
 	    }
 	//adding request to request Model
     $maxreqdata = MaxmindRequestModel::create($request->all());
+   /* return response()->json($maxreqdata,200);
+
+    exit;*/
     //return response()->json('data has been inserted',201);
     $maxreqid  = $maxreqdata->id; 
 	//return responsce()->json('testing end',20);
+    
 	
     //testing the data in to database..
     $maxmind = new MinFraud(231747,'X3MRhIz988pVLyHo');
@@ -168,26 +172,66 @@ class MaxmindController extends Controller
             'previous_user'      => $previous_user,
         ]);
 
-		$insightsResponse = $mxrequest->insights();
-		$score = $insightsResponse->riskScore;
+		$insightsResponse    = $mxrequest->insights();
+		$score               			= $insightsResponse->riskScore;
+        $maxmind_id          			= $insightsResponse->id;
+        $address_latitude    			= $insightsResponse->billingAddress->latitude;
+        $address_longitude   			= $insightsResponse->billingAddress->longitude;
+        $distanceToIpLocation           = $insightsResponse->billingAddress->distanceToIpLocation;
+        $isInIpCountry                  = $insightsResponse->billingAddress->isInIpCountry;
+        $creditCard_issuer_name     	= $insightsResponse->creditCard->issuer->name;
+        $issuer_number 					= $insightsResponse->creditCard->issuer->phoneNumber;
+        $creditCard_barand              = $insightsResponse->creditCard->brand;
+        $creditCard_country             = $insightsResponse->creditCard->country;
+        $creditCard_type              	= $insightsResponse->creditCard->type;
+        $firstSeen                      = $insightsResponse->email->firstSeen;
+        $isDisposable                   = $insightsResponse->email->isDisposable;
+        $isFree                         = $insightsResponse->email->isFree;
+        $isHighRisk                     = $insightsResponse->shippingAddress->isHighRisk;
+        $distanceToBillingAddress       = $insightsResponse->shippingAddress->distanceToBillingAddress;
+        $isPostalInCity       			= $insightsResponse->shippingAddress->isPostalInCity;
+        $ship_latitude       	    	= $insightsResponse->shippingAddress->latitude;
+        $ship_longitude      	    	= $insightsResponse->shippingAddress->longitude;
+        $ship_ToIpLocation      	    = $insightsResponse->shippingAddress->distanceToIpLocation;
+        $ship_Country                   = $insightsResponse->shippingAddress->isInIpCountry;
 
-
-		
 		$status = 0;
 		if(isset($score)&& !empty($score)){
              $status =1; 
 		}else{
 			 $status = 0;
 		}
-
-        $resarray 	= Array(
-						    'request_id' => $maxreqid,
-						    'risk_score' => $score,
-						    'status' => $status,
-						    'record_deleted' => '0',					    
-						 );
-        MaxmindResponseModel::create($resarray);
         
-		return response()->json($score,200);
+        $resarray 	= Array(
+        'request_id'=> $maxreqid,
+        'risk_score' => $score, 
+        'status' => $status,
+        'maxmind_id' => $maxmind_id,
+        'address_latitude' => $address_latitude,
+		'address_longitude'=> $address_longitude,
+		'distanceToIpLocation'=> $distanceToIpLocation,
+		'isInIpCountry'=> $isInIpCountry,
+		'creditCard_issuer_name'=> $creditCard_issuer_name, 
+		'issuer_number'=> $issuer_number, 
+		'creditCard_barand'=> $creditCard_barand,
+		'creditCard_country'=> $creditCard_country,
+		'creditCard_type' => $creditCard_type,
+		'firstSeen' => $firstSeen,
+		'isDisposable'=> $isDisposable,
+		'isFree'   => $isFree,
+	 	'isHighRisk' => $isHighRisk,
+		'distanceToBillingAddress' => $distanceToBillingAddress,
+		'isPostalInCity' => $isPostalInCity,
+		'ship_latitude' => $ship_latitude,
+		'ship_longitude' => $ship_longitude,
+		'ship_ToIpLocation'=> $ship_ToIpLocation,
+		'ship_Country' =>  $ship_Country,
+		'record_deleted' => '0',				    					    
+		 );
+
+
+        $resutl=MaxmindResponseModel::create($resarray);
+        
+		return response()->json($resutl,200);
     }
 }
